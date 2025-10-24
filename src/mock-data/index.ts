@@ -1,2 +1,2 @@
 export { mockGifs } from './gifs.mock'
-export { robots } from './robots.mocks'
+export { robots } from './panesMocks'

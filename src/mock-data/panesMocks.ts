@@ -1,5 +1,5 @@
 
-export interface robotsProps {
+export interface panesPropiedades {
     series:number;
     id:number;
     name:string;
@@ -11,7 +11,8 @@ export interface robotsProps {
 }
 
 
-export const robots:robotsProps[] = [
+
+export const panes:panesPropiedades[] = [
     {
         "series": 1,
         "id":0,
@@ -65,12 +66,12 @@ export const robots:robotsProps[] = [
     {
         "series": 1,
         "id":5,
-        "name": "Ice Man",
-        "weapon":"Ice Slasher",
-        "avatar":"https://static.wikia.nocookie.net/esmegaman/images/0/04/MM-IceMan.jpg",        
-        "sprite1": "https://static.miraheze.org/ccbmwikiwiki/6/61/IceMan.png",
-        "weakness":"Thunder Beam",
-        "stageImg":"https://static.wikia.nocookie.net/esmegaman/images/4/44/IceMan-Mapa.png",
+        "name": "Pan casero",
+        "weapon":"Crocante y sabroso",
+        "avatar":"https://tse1.explicit.bing.net/th/id/OIP.9SfcWjxaJ3BOVlV0kWpJPAHaEx?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3",        
+        "sprite1": "https://tse1.explicit.bing.net/th/id/OIP.9SfcWjxaJ3BOVlV0kWpJPAHaEx?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3",
+        "weakness":"Se acaba rapido",
+        "stageImg":"https://images.unsplash.com/photo-1570872622034-7431e21a26c9",
     },
     {
         "series": 1,
