@@ -1,6 +1,6 @@
 export interface ImagePanType {
 id: number | string;
-title: string;
+titulo: string;
 url: string;
-price: number;
+precio: number;
 }

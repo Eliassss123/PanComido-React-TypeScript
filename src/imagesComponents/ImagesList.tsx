@@ -27,7 +27,7 @@ export const ImagesList: React.FC<ListaImagenesPropiedades> = ({ images, onBuy, 
         <div key={img.id} style={{ position: "relative", width: 200, height: 200, overflow: "hidden", borderRadius: 10 }}>
           <img
             src={img.url}
-            alt={img.title}
+            alt={img.titulo}
             className="img-fluid w-100 h-100 rounded"
             style={{ objectFit: "cover", cursor: "pointer" }}
             onClick={() => onView(img)} // 🔹 abrir modal

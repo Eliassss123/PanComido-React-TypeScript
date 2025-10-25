@@ -1,8 +1,8 @@
 import React from 'react';
-import type { NavbarItem } from '../NavBarType'; // para el archivo aparte
+import type { NavItemType } from '../NavBarType'; // para el archivo aparte
 
 interface NavbarProps {
-  items: NavbarItem[];
+  items: NavItemType[];
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ items }) => {
