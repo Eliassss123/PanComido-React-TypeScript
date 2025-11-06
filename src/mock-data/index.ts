@@ -1,2 +1,2 @@
-export { mockGifs } from './gifs.mock'
-export { robots } from './panesMocks'
+
+export { panes } from './panesJSON'

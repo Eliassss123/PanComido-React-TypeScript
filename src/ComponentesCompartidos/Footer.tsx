@@ -1,5 +1,8 @@
 import { Container, Row, Col } from "react-bootstrap";
 
+
+
+// Componente Footer compartido en toda la aplicación
 export const Footer: React.FC = () => {
   return (
     <footer className="bg-dark text-white py-4 mt-auto">

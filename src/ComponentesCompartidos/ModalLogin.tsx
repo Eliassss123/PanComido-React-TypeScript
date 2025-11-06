@@ -1,74 +1,83 @@
-import React, { useState } from "react";
+// ComponentesCompartidos/ModalLogin.tsx
+import { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 
 interface ModalLoginProps {
-  onLogin: (username: string) => void;
+  onLogin: () => void; // función para activar isAuthenticated
 }
 
 export const ModalLogin: React.FC<ModalLoginProps> = ({ onLogin }) => {
-  const [username, setUsername] = useState("");
+  const [usuario, setUsuario] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
-  // Lista de usuarios válidos
-  const usuariosValidos = [
+  // Lista de usuarios permitidos
+  const usuariosPermitidos = [
     { usuario: "admin", password: "1234" },
-    { usuario: "elias", password: "abcd" },
-    { usuario: "cliente", password: "0000" },
+    { usuario: "elias", password: "1234" },
+    { usuario: "benjamin", password: "1234" },
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const user = usuariosValidos.find(
-      (u) => u.usuario === username && u.password === password
+  // Maneja el intento de login
+  const handleLogin = () => {
+    const valido = usuariosPermitidos.some(
+      (u) => u.usuario === usuario && u.password === password
     );
-    if (user) {
-      onLogin(username);
-      localStorage.setItem("auth", "true");
-      setError("");
+
+    // Si las credenciales son válidas, llama a onLogin
+    if (valido) {
+      onLogin(); // activa isAuthenticated en la app
     } else {
-      setError("Usuario o contraseña incorrectos.");
+      alert("Usuario o contraseña incorrectos");
     }
   };
 
+  // Limpia los campos de usuario y contraseña
+  const handleLimpiar = () => {
+    setUsuario("");
+    setPassword("");
+  };
+
+
+  // Renderiza el modal de login
   return (
-    <Modal show={true} backdrop="static" centered>
+    <Modal show centered>
       <Modal.Header>
         <Modal.Title>Iniciar Sesión</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3">
+        <Form>
+          <Form.Group className="mb-3" controlId="inputUsuario">
             <Form.Label>Usuario</Form.Label>
             <Form.Control
               type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
               placeholder="Ingresa tu usuario"
+              value={usuario}
+              onChange={(e) => setUsuario(e.target.value)}
               required
             />
           </Form.Group>
 
-          <Form.Group className="mb-3">
+{/*  Campo de contraseña  */}
+          <Form.Group className="mb-3" controlId="inputPassword">
             <Form.Label>Contraseña</Form.Label>
             <Form.Control
               type="password"
+              placeholder="Ingresa tu contraseña"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Ingresa tu contraseña"
               required
             />
           </Form.Group>
-
-          {error && <p style={{ color: "red" }}>{error}</p>}
-
-          <div className="d-grid">
-            <Button variant="primary" type="submit">
-              Entrar
-            </Button>
-          </div>
         </Form>
       </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" type="button" onClick={handleLimpiar}>
+          Limpiar
+        </Button>
+        <Button variant="primary" type="button" onClick={handleLogin}>
+          Ingresar
+        </Button>
+      </Modal.Footer>
     </Modal>
   );
 };

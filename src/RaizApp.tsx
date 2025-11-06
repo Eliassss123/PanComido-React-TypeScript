@@ -1,94 +1,79 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState } from 'react';
-import { Navbar, Nav, Container, Modal, Button } from "react-bootstrap";
+import { Navbar, Nav, Container, Modal, Button, DropdownButton, Dropdown } from "react-bootstrap";
 import { BusquedasPrevias } from "./imagesComponents/BusquedasPrevias";
-import { CustomHeader, SearchBar } from './ComponentesCompartidos';
 import { ImagesList } from './imagesComponents/ImagesList';
-import type { ImagePanType } from './types/ImagePanType';
-import { panes } from './mock-data/panesMocks';
+import { panes } from './mock-data/panesJSON';
 import { Blog } from "./paginas/blog";
 import { Nosotros } from "./paginas/Nosotros";
-import { Footer } from "./ComponentesCompartidos/Footer";
-import { Carro } from './ComponentesCompartidos/CarritoPropiedades';
 import { Recetas } from "./paginas/recetas";
-import { BotonCompra } from './ComponentesCompartidos/BotonComprarTodo';
-import { ModalLogin } from './ComponentesCompartidos/ModalLogin'; // 👈 nuevo import
+import type { ImagePanType } from './types';
+import { ModalLogin, BotonCompra, Carro, Footer, CustomHeader, SearchBar } from './ComponentesCompartidos'; 
+import { useCarrito, useOrdenHistorial, useAuth, useCategorias } from "./personalHooks";
 
 
 
-export const ImagesApp: React.FC = () => {
+// Componente principal
+export const PanaderiaApp: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"recetas" | "blog" | "nosotros" | "panes" | "carrito">("panes");
-  const [carro, setCart] = useState<ImagePanType[]>([]);
+  const { carro, agregar, eliminar, vaciar } = useCarrito();
   const [panSeleccionado, setPanSeleccionado] = useState<ImagePanType | null>(null);
   const [mostrarVentanilla, setMostrarVentanilla] = useState(false);
-  const [busquedasPrevias, setBusquedasPrevias] = useState<string[]>([]);
+  const { isAuthenticated, login: handleLogin, logout: handleLogout } = useAuth();
 
-  // 🧠 Estado de autenticación
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    localStorage.getItem("auth") === "true"
-  );
+  // Alerta para mensaje de carrito
+  const [mostrarAlerta, setMostrarAlerta] = useState(false);
+  const [mensajeAlerta, setMensajeAlerta] = useState("");
 
-  const handleLogin = () => {
-    setIsAuthenticated(true);
-    localStorage.setItem("auth", "true");
-  };
-
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    localStorage.removeItem("auth");
-  };
-
-  // 🛒 Funciones del carrito
-  const funcEliminarItem = (id: number | string) => {
-    setCart(prev => prev.filter(item => item.id !== id));
-  };
-
-  const funcComprarItem = (item: ImagePanType) => {
-    setCart(prev => [...prev, item]);
-  };
-
-  // 🔍 Modal de panes
-  const funcAbrirModal = (product: ImagePanType) => {
-    setPanSeleccionado(product);
-    setMostrarVentanilla(true);
-  };
-
-  const funcCerrarModal = () => {
-    setPanSeleccionado(null);
-    setMostrarVentanilla(false);
-  };
-
-  // 🥖 Datos de panes
+  // Datos de panes
   const images: ImagePanType[] = panes.map((pan) => ({
     id: pan.id,
     titulo: pan.name,
     url: pan.avatar,
     precio: Math.floor(Math.random() * 4000) + 1000,
+    categoria: pan.categoria || "Blanco",
   }));
 
-  // 🧭 Función de búsqueda
-  const funcOrdenHistorial = (query: string) => {
-    if (!query.trim()) return;
-    setBusquedasPrevias(prev => [query, ...prev.filter(t => t !== query)].slice(0, 5));
+  // Categorias
+  const categorias = ["Integral", "Blanco", "Dulce", "Salado"];
+  const { categoriaSeleccionada, setCategoriaSeleccionada, itemsFiltrados } = useCategorias(images, categorias);
 
-    const textoIngresado = query.trim().toLowerCase();
-    let encontrado = images.find(img => img.titulo.toLowerCase() === textoIngresado);
-    if (!encontrado) {
-      encontrado = images.find(img => img.titulo.toLowerCase().includes(textoIngresado));
-    }
-    if (encontrado) {
-      funcAbrirModal(encontrado);
-    }
+  // Hook personalizado para la búsqueda
+  const { busquedasPrevias, funcOrdenHistorial } = useOrdenHistorial(images, funcAbrirModal);
+
+  // Funciones de modal
+  function funcAbrirModal(product: ImagePanType) {
+    setPanSeleccionado(product);
+    setMostrarVentanilla(true);
+  }
+
+
+// Función para cerrar el modal
+  function funcCerrarModal() {
+    setPanSeleccionado(null);
+    setMostrarVentanilla(false);
+  }
+
+
+
+  // Función para agregar producto al carrito con una alerta
+  const handleAddToCart = (item: ImagePanType) => {
+    agregar(item);
+    setMensajeAlerta(`${item.titulo} añadido al carrito`);
+    setMostrarAlerta(true);
+    setTimeout(() => setMostrarAlerta(false), 2000);
   };
 
-  // 🔐 Si no está logueado, muestra el modal de login
+
+
+  // Si no esta logueado, mostrar modal de login
   if (!isAuthenticated) {
     return <ModalLogin onLogin={handleLogin} />;
   }
 
-  // ✅ Si está logueado, muestra la app completa
   return (
     <div>
+      
       {/* Navbar */}
       <Navbar bg="dark" variant="dark" expand="lg">
         <Container>
@@ -100,12 +85,12 @@ export const ImagesApp: React.FC = () => {
             <Nav.Link onClick={() => setActiveTab("nosotros")}>Historia</Nav.Link>
             <Nav.Link onClick={() => setActiveTab("recetas")}>Recetas</Nav.Link>
           </Nav>
-          {/* Botón de cierre de sesión */}
           <Button variant="outline-light" size="sm" onClick={handleLogout}>
             Cerrar sesión
           </Button>
         </Container>
       </Navbar>
+
 
       {/* Contenido */}
       <Container className="text-center mt-4">
@@ -115,19 +100,45 @@ export const ImagesApp: React.FC = () => {
         {activeTab === "panes" && (
           <>
             <CustomHeader title="Pan Comido" text="Bienvenidos a la panadería" />
-            <SearchBar textoDifuminado="Busque su producto" onQuery={funcOrdenHistorial} />
+
+            {/* Buscador + Categorías */}
+            <div className="d-flex justify-content-center align-items-center gap-2 mb-3">
+              <SearchBar textoDifuminado="Busque su producto" onQuery={funcOrdenHistorial} />
+
+
+            {/* Desplegable*/}
+              <DropdownButton
+                id="dropdown-categorias"
+                title={categoriaSeleccionada || "Categorías"}
+                variant="secondary"
+              >
+                {categorias.map(cat => (
+                  <Dropdown.Item key={cat} onClick={() => setCategoriaSeleccionada(cat)}>
+                    {cat}
+                  </Dropdown.Item>
+                ))}
+                <Dropdown.Item onClick={() => setCategoriaSeleccionada(null)}>Todas</Dropdown.Item>
+              </DropdownButton>
+            </div>
+
+                {/* Etiquetas de búsquedas previas */}
             <BusquedasPrevias busquedas={busquedasPrevias} onLabelClicked={funcOrdenHistorial} />
-            <ImagesList images={images} onBuy={funcComprarItem} onView={funcAbrirModal} />
+            <ImagesList images={itemsFiltrados} onBuy={handleAddToCart} onView={funcAbrirModal} />
           </>
         )}
 
+
+        {/* Carrito */}
         {activeTab === "carrito" && (
           <Container style={{ marginTop: "20px" }}>
-            <h3>🛍️ Carrito: {carro.length} producto(s)</h3>
-            <Carro carrito={carro} onRemove={funcEliminarItem} />
-            <BotonCompra carrito={carro} onVaciar={() => setCart([])} />
+            <h3>Carrito: {carro.length} producto(s)</h3>
+            <Carro carrito={carro} onRemove={eliminar} />
+            <BotonCompra carrito={carro} onVaciar={vaciar} />
           </Container>
         )}
+
+
+
 
         {/* Modal de producto */}
         <Modal show={mostrarVentanilla} onHide={funcCerrarModal} centered>
@@ -143,7 +154,7 @@ export const ImagesApp: React.FC = () => {
             <Button
               variant="primary"
               onClick={() => {
-                if (panSeleccionado) funcComprarItem(panSeleccionado);
+                if (panSeleccionado) handleAddToCart(panSeleccionado);
                 funcCerrarModal();
               }}
             >
@@ -151,6 +162,24 @@ export const ImagesApp: React.FC = () => {
             </Button>
           </Modal.Footer>
         </Modal>
+
+
+
+
+        {/* Alerta de Bootstrap */}
+        <div
+          className={`alerta position-fixed bottom-0 end-0 m-3 ${mostrarAlerta ? "show" : ""}`}
+          role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
+          style={{ minWidth: "200px" }}
+        >
+          <div className="alerta-header">
+            <strong className="me-auto">Carrito</strong>
+            <button type="button" className="btn-cerrar" onClick={() => setMostrarAlerta(false)}></button>
+          </div>
+          <div className="alerta-body">{mensajeAlerta}</div>
+        </div>
       </Container>
 
       {/* Footer */}

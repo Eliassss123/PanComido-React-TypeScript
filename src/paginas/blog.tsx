@@ -6,9 +6,10 @@ export const Blog: React.FC = () => {
     id: 1,
     titulo: "  ",
     precio: 0,
-    url: "/images/Blog1.jpg"
+    url: "/images/Blog1.jpg",
+    categoria:""
   };
-
+// Renderiza la imagen del blog con un enlace para descargarla
   return (
     <div style={{ textAlign: "center", marginTop: "20px" }}>
       <h2>{blogImage.titulo}</h2>

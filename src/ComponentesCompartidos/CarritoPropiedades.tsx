@@ -2,11 +2,15 @@ import React from "react";
 import { Container, Button, Card, Row, Col } from "react-bootstrap";
 import type { ImagePanType } from "../types/ImagePanType";
 
+
+// Props para el componente Carro
 interface CarritoPropiedades {
   carrito: ImagePanType[];
   onRemove: (id: number | string) => void;
 }
 
+
+// Componente que muestra los ítems en el carrito de compras
 export const Carro: React.FC<CarritoPropiedades> = ({ carrito, onRemove }) => {
   if (carrito.length === 0) {
     return (
@@ -17,16 +21,18 @@ export const Carro: React.FC<CarritoPropiedades> = ({ carrito, onRemove }) => {
           className="img-fluid mb-3"
           style={{ maxWidth: "300px" }}
         />
-        <h5>🛒 Tu carrito está vacío</h5>
+        <h5> Tu carrito está vacío</h5>
       </Container>
     );
   }
 
+  // Muestra los ítems en el carrito
   return (
     <Row className="g-3">
-      {carrito.map((item) => (
-        <Col key={item.id} xs={12} md={6} lg={4}>
+      {carrito.map((item, index) => (
+        <Col key={`${item.id}-${index}`} xs={12} md={6} lg={4}>
           <Card>
+            {/* Imagen del producto */}
             <Card.Img variant="top" src={item.url} alt={item.titulo} />
             <Card.Body>
               <Card.Title>{item.titulo}</Card.Title>

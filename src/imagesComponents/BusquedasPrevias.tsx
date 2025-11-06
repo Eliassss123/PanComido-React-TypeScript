@@ -5,11 +5,16 @@ interface Propiedades {
   onLabelClicked?: (term: string) => void;
 }
 
+
+// Componente para mostrar búsquedas previas como etiquetas clicables
 export const BusquedasPrevias: FC<Propiedades> = ({ busquedas, onLabelClicked }) => {
   return (
     <div className="mb-3">
       <h5> </h5>
+      {/* Lista de etiquetas de búsquedas previas */}
       <ul className="list-inline">
+
+        {/* Mapea cada término de búsqueda a un botón */}
         {busquedas.map((termino) => (
           <li key={termino} className="list-inline-item">
             <button

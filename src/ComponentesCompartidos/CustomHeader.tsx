@@ -5,7 +5,9 @@ interface Props {
 }
 
 
-export const CustomHeader = ({ title , text = 'Buscador de imagenes' }:Props) => {
+
+// Componente de encabezado personalizado
+export const CustomHeader = ({ title , text = 'Tienda de pan' }:Props) => {
   return (
     <div className="content-center">
         <h1>{ title }</h1>

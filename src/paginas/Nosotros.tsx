@@ -1,7 +1,11 @@
 import React from "react";
 import { Container, Row, Col, Image } from "react-bootstrap";
 
+
+
+// Pagina "Nosotros" que describe la historia de la panaderia
 export const Nosotros: React.FC = () => {
+  //
 return ( <Container className="py-5 text-black"> <Row className="align-items-center"> <Col md={6} className="mb-4 mb-md-0"> <Image
          src="https://tse1.mm.bing.net/th/id/OIP._JX21ulVynsX-fgSMwd3NwAAAA?rs=1&pid=ImgDetMain&o=7&rm=3"
          alt="Panadería Pan Comido"
