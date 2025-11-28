@@ -1,48 +1,42 @@
 package com.pancomido.pedido.modelPedido;
 
+import jakarta.persistence.*;
+import lombok.*;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pancomido.pancomido.tienda.modelTienda.Tienda;
-
-import jakarta.persistence.*;
-import lombok.*;
-
 @Entity
-@Table(name = "pedido")
+@Table(name = "pedidos")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Pedido {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    
-    @ManyToOne
-    @JoinColumn(name = "cliente_id", nullable = false)
-    private Cliente cliente;
+    private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "tienda_id", nullable = false)
-    private Tienda tienda;
+    // correo del usuario que hizo el pedido (viene desde auth)
+    @Column(nullable = false)
+    private String correoUsuario;
 
-    @ManyToMany
-    @JoinTable(
-        name = "pedido_producto",
-        joinColumns = @JoinColumn(name = "pedido_id"),
-        inverseJoinColumns = @JoinColumn(name = "producto_id")
+    @Column(nullable = false)
+    private LocalDateTime fechaCreacion;
+
+    @Column(nullable = false)
+    private String estado; // CARRITO, PAGADO, ENVIADO, CANCELADO, etc.
+
+    @Column(nullable = false)
+    private Integer total; // total del pedido en pesos
+
+    // Ítems del carrito/pedido (embebidos, sin depender de Producto @Entity)
+    @ElementCollection
+    @CollectionTable(
+            name = "pedido_items",
+            joinColumns = @JoinColumn(name = "pedido_id")
     )
-    private List<Producto> productos = new ArrayList<>(); // inicializada para evitar null
-
-
-    @Column(nullable = false)
-    private String estado = "PENDIENTE";
-
-    @Column(nullable = false)
-    private LocalDateTime fecha = LocalDateTime.now();
-
-    public void agregarProducto(Producto producto) {
-        this.productos.add(producto);
-    }
+    private List<ItemPedido> items = new ArrayList<>();
 }

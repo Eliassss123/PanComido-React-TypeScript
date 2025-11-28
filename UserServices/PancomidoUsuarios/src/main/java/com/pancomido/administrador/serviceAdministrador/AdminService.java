@@ -26,7 +26,7 @@ public class AdminService {
 
     private final String PRODUCT_SERVICE_URL = "http://localhost:8082/api/productos/por-ids";
 
-    public List<productoDTOAdmin> obtenerProductosPorIds(List<Long> ids) {
+    public List<productoDTOAdmin> obtenerProductosPorId(List<Long> ids) {
         ResponseEntity<productoDTOAdmin[]> response = restTemplate.postForEntity(
             PRODUCT_SERVICE_URL, ids, productoDTOAdmin[].class
         );

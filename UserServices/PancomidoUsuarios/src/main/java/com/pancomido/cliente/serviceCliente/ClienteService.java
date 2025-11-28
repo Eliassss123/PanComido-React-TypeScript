@@ -47,7 +47,7 @@ public class ClienteService {
 
             usuarioExistente.setNombre(usuarioNuevo.getNombre());
             usuarioExistente.setCorreo(usuarioNuevo.getCorreo());
-            usuarioExistente.setContraseña(usuarioNuevo.getContraseña());
+            usuarioExistente.setContrasena(usuarioNuevo.getContrasena());
 
             if (usuarioExistente.getId() == null) {
                 Usuario creado = usuarioService.crearUsuario(usuarioExistente);

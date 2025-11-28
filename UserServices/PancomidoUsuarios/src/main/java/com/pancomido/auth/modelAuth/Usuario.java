@@ -27,9 +27,10 @@ public class Usuario {
     @Column(unique = true, nullable = false)
     private String correo;
 
-    @Column(nullable = false)
-    private String contraseña;
+    @Column(name = "contraseña")  // <-- NOMBRE REAL DE LA COLUMNA EN MYSQL
+    private String contrasena;    // <-- NOMBRE DEL ATRIBUTO EN JAVA (sin ñ)
 
+    
     @Column(nullable = false)
     private String rol = "CLIENTE";
 

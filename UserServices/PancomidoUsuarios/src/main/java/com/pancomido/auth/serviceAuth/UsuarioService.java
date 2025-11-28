@@ -17,6 +17,10 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+
+
+
+    
     public Usuario crearUsuario(Usuario usuario) {
         // Validar rol
         if (!List.of("CLIENTE", "GERENTE", "ADMIN").contains(usuario.getRol())) {
@@ -37,9 +41,10 @@ public class UsuarioService {
         usuarioRepository.deleteById(id);
     }
 
-    public boolean validarCredenciales(String correo, String contraseña) {
-        Optional<Usuario> usuario = usuarioRepository.findByCorreo(correo);
-        return usuario.isPresent() && usuario.get().getContraseña().equals(contraseña);
+    public boolean validarCredenciales(String correo, String contrasena) {
+        return usuarioRepository.findByCorreo(correo)
+                .map(u -> u.getContrasena().equals(contrasena))
+                .orElse(false);
     }
 
     

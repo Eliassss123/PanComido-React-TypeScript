@@ -1,41 +1,37 @@
 package com.pancomido.boleta.serviceBoleta;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.pancomido.boleta.modelBoleta.Boleta;
+import com.pancomido.pedido.modelPedido.ItemPedido;
+import com.pancomido.pedido.modelPedido.Pedido;
+import com.pancomido.pedido.repositoryPedido.PedidoRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import com.pancomido.pancomido.boleta.modelBoleta.Boleta;
-import com.pancomido.pancomido.boleta.repositoryBoleta.BoletaRepository;
-import com.pancomido.pancomido.pedido.modelPedido.Pedido;
-import com.pancomido.pancomido.pedido.repositoryPedido.PedidoRepository;
-
-import java.util.List;
-
 @Service
+@RequiredArgsConstructor
 public class BoletaService {
 
-    @Autowired
-    private BoletaRepository boletaRepository;
-    @Autowired
-    private PedidoRepository pedidoRepository;
+    private final PedidoRepository pedidoRepository;
 
-    public List<Boleta> obtenerPorPedido(Pedido pedido) {
-        return boletaRepository.findByPedido(pedido);
+    /**
+     * Genera un resumen de boleta a partir de un pedido ya almacenado en la BD.
+     */
+    public Boleta generarResumen(Long pedidoId) {
+        Pedido pedido = pedidoRepository.findById(pedidoId)
+                .orElseThrow(() -> new RuntimeException("Pedido no encontrado con ID: " + pedidoId));
+
+        int cantidadTotal = pedido.getItems().stream()
+                .mapToInt(ItemPedido::getCantidad)
+                .sum();
+
+        Boleta boleta = new Boleta();
+        boleta.setPedidoId(pedido.getId());
+        boleta.setCorreoUsuario(pedido.getCorreoUsuario());
+        boleta.setFecha(pedido.getFechaCreacion());
+        boleta.setTotal(pedido.getTotal());
+        boleta.setCantidadTotal(cantidadTotal);
+        boleta.setItems(pedido.getItems());
+
+        return boleta;
     }
-
-    public Boleta guardarBoleta(Boleta boleta) {
-        boleta.setSubtotal(boleta.getCantidad() * boleta.getPrecioUnitario());
-        return boletaRepository.save(boleta);
-    }
-    public Boleta generarBoleta(Integer pedidoId) {
-    Pedido pedido = pedidoRepository.findById(pedidoId)
-        .orElseThrow(() -> new RuntimeException("Pedido no encontrado con ID: " + pedidoId));
-
-    List<Boleta> boletas = boletaRepository.findByPedido(pedido);
-
-    if (boletas.isEmpty()) {
-        throw new RuntimeException("No hay boletas asociadas al pedido con ID: " + pedidoId);
-    }
-
-    return boletas.get(0); // puedes ajustar esto según tu lógica
-}
 }

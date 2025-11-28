@@ -1,10 +1,12 @@
 package com.pancomido.pedido.repositoryPedido;
 
+import com.pancomido.pedido.modelPedido.Pedido;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 
-import com.pancomido.pancomido.pedido.modelPedido.Pedido;
+public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 
-public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
+    // Para historial por usuario (correo)
+    List<Pedido> findByCorreoUsuarioOrderByFechaCreacionDesc(String correoUsuario);
 }
-
