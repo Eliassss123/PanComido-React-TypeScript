@@ -1,0 +1,2 @@
+
+export { panes } from './panesJSON'
