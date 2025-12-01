@@ -11,7 +11,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/pedidos")
-@CrossOrigin(origins = "http://localhost:5173") // puerto del front (Vite)
 @RequiredArgsConstructor
 public class PedidoController {
 

@@ -45,12 +45,6 @@
             <artifactId>spring-cloud-starter-gateway</artifactId>
         </dependency>
 
-        <!-- ✅ Eureka Client (para registrarse en Eureka y usar lb://...) -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-        </dependency>
-
         <!-- Config Client (opcional, si usas Config Server) -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>

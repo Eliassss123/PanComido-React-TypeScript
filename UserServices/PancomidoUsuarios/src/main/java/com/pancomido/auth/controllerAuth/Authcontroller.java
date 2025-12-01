@@ -15,7 +15,6 @@ import com.pancomido.auth.serviceAuth.UsuarioService;
 
 import java.util.Optional;
 
-@CrossOrigin(origins = "*") // para dev: acepta cualquier origen (5173 incluido)
 @RestController
 @RequestMapping("/api/auth")
 public class Authcontroller {
