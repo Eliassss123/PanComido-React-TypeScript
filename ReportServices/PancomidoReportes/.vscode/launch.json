@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-PancomidoApplication<pancomido>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.pancomido.pancomido.PancomidoApplication",
+            "projectName": "pancomido",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-PancomidoApplication<eckomarket>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.pancomido.pancomido.PancomidoApplication",
+            "projectName": "eckomarket",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

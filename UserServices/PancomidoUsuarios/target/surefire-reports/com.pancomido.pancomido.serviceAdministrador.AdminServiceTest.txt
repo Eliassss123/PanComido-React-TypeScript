@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.pancomido.pancomido.serviceAdministrador.AdminServiceTest
+-------------------------------------------------------------------------------
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.817 s -- in com.pancomido.pancomido.serviceAdministrador.AdminServiceTest

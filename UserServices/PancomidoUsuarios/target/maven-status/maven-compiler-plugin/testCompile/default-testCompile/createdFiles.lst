@@ -1,0 +1,7 @@
+com\pancomido\pancomido\PancomidoApplicationTests.class
+com\pancomido\pancomido\controllerAuth\AuthcontrollerTest.class
+com\pancomido\pancomido\controllerCliente\ClienteControllerTest.class
+com\pancomido\pancomido\controllerAdministrador\AdministradorControllerTest.class
+com\pancomido\pancomido\serviceAuth\UsuarioServiceTest.class
+com\pancomido\pancomido\serviceCliente\ClienteServiceTest.class
+com\pancomido\pancomido\serviceAdministrador\AdminServiceTest.class

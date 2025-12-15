@@ -1,0 +1,4 @@
+com\pancomido\administrador\controllerAdministrador\AdministradorController.class
+com\pancomido\PancomidoApplication.class
+com\pancomido\administrador\serviceAdministrador\AdminService.class
+com\pancomido\administrador\ProductoDTOAdmin\productoDTOAdmin.class
